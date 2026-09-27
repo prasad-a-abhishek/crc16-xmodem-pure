@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-580%2B-brightgreen)](#-quick-start)
+[![Tests](https://img.shields.io/badge/tests-532%2F532-brightgreen)](#-quick-start)
 
 ## ⚡ Quick Start
 
