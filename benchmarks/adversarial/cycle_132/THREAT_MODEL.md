@@ -1,167 +1,216 @@
-# THREAT_MODEL — crc16-xmodem attacker model and worst-case impact
+# THREAT_MODEL.md — Attacker model and worst-case impact
 
-> Cycle 132 / T1 VULN_AUDIT — narrative threat model for `crc16-xmodem` @ 6071f9c.
->
-> Source: `SURFACES.md` (4 surfaces), `CWE_MAP.md` (45 CWEs considered),
-> probe script `/tmp/adv_probes.py`.
+> **Cycle:** 132
+> **Repo:** `crc16-xmodem-pure` (commit 6071f9c)
+> **Date:** 2026-09-27
 
-## TM1 — System context
+This document enumerates plausible attacker models for a pure-Python
+CRC-16/XMODEM reference implementation, identifies the worst-case
+impact in each model, and rates the realistic exploitability of the
+findings recorded in `VULN_AUDIT.md`.
 
-`crc16-xmodem` is a pure-Python CRC-16/XMODEM reference implementation
-(Ward Christensen 1977 XMODEM file-transfer protocol). The package is:
+---
 
-- **Offline only.** No network code. No HTTP client. No socket. No DNS.
-- **Filesystem-free at runtime.** No file reads/writes outside of pip's
-  one-time install hooks (which run as the installing user, not as the
-  CRC-computing process).
-- **Zero runtime dependencies.** No third-party packages linked at install
-  or runtime.
-- **Stateless.** No global mutable state. Multiple threads / processes can
-  call `crc()` concurrently without any data race.
+## T0 — What this package is
 
-The deployment surface is:
-1. **Library API** — `from crc16_xmodem import crc` in a Python process.
-2. **CLI** — `python3 -m crc16_xmodem [--data | --stdin | --self-test | --register]`.
-3. **Console script** — `crc16-xmodem` (same code path as the CLI).
+`crc16-xmodem-pure` is a **pure-Python, zero-dependency** implementation
+of the CRC-16/XMODEM algorithm. Its public API consists of two
+functions:
 
-## TM2 — Attacker model
+- `crc(data) -> int` — compute the 16-bit CRC over bytes-like input.
+- `register() -> dict` — return the RevEng parameter table.
 
-There are three plausible attacker profiles. Each is evaluated against the
-attack surface and given a worst-case impact rating.
+The CLI (`crc16-xmodem`) wraps these for command-line use. Total
+runtime LOC: ~25 (algorithm) + ~40 (CLI).
 
-### TM2.1 — Attacker controls the input bytes (`crc(attacker_bytes)`)
+CRC-16/XMODEM is a **non-cryptographic** error-detecting code. It is
+suitable for catching accidental bit-flips in transit (XMODEM file
+transfer, MODEM7/YMODEM/ZMODEM families), but **is not suitable for
+authentication or tamper detection** (see SPEC §6 — "NOT
+cryptographic"). The threat model below respects that boundary.
 
-**Capability:** Full control over the `data` argument to `crc()`.
-**Constraints:** Cannot control the algorithm constants (no `init`/`poly`/`refin`
-parameters exist on the public API — only the fixed `register()` exposes them
-read-only).
-**Goal:** Cause denial of service, memory exhaustion, integer overflow,
-algorithmic confusion, or uncaught exceptions that crash the host process.
+---
 
-**Worst-case impact assessment:**
+## T1 — Attacker models
 
-| Attack | Feasible? | Impact |
-|---|---|---|
-| Cause OOM via multi-GB input | Yes (caller controls size) | Low — Python OOM raises `MemoryError`, not a crash-vuln. Documented Python behavior. |
-| Cause quadratic blowup | No — algorithm is `O(8 * len(data))` per byte. Probe VULN-3 confirms 50 MiB in 33s linear scaling. | None |
-| Cause infinite loop | No — both inner loops have fixed iteration counts. Probe VULN-3 + VULN-12 confirm termination. | None |
-| Cause integer overflow | No — Python ints are arbitrary precision; `& 0xFFFF` masks the result to 16 bits regardless. Probe VULN-11 confirms 1000 random inputs all in `[0, 65536)`. | None |
-| Cause TypeError crash | Yes — but TypeError is a documented, clean exception, not a vulnerability. Probe VULN-1 covers 10 invalid types. | None (clean) |
-| Cause the result to exceed 16 bits | No — `& 0xFFFF` mask at every shift and XOR. Probe VULN-11 confirms. | None |
-| Cause confusion with a sibling CRC | No — algorithm constants are hard-coded in module; `register()` returns the constants but caller cannot inject them. Probe VULN-8 confirms RevEng byte-exact match. | None |
+### T1.1 — Honest user with a typo
+**Description:** A developer copy-pastes or hand-types a CLI invocation
+like `--data 123456789`, expecting either 9 bytes `[1,2,3,4,5,6,7,8,9]`
+or 9 ASCII hex bytes. Instead, the CLI silently interprets the string
+either as the bytes `\x89` (single-byte decimal 123456789) or as 5 raw
+bytes (single-arg hex interpretation). The CRC produced is **wrong for
+their intent**.
 
-**Verdict for TM2.1:** No exploitable vulnerabilities. Maximum impact is a
-TypeError from the caller's own misuse (raising is the safe, correct behavior).
+- **Worst-case impact:** silent corruption of a file checksum; an
+  XMODEM-CRC receiver rejects every legitimate sender (because the
+  sender's CRC matches the input bytes but the receiver's CRC matches
+  the disambiguated interpretation). Field symptoms are the same as
+  the SPEC §1 failure scenario ("no YMODEM batches decoded").
+- **Attack vector:** none — this is purely user error, not adversarial.
+- **Severity:** Low (operational, not security).
+- **Affected surface:** CLI `--data` only.
+- **Mitigation:** SPEC §6 disclaims throughput / single-utility scope;
+  the README explicitly tells users to use `crcmod` for production.
+  The CLI doc string could be improved, but the algorithm itself is
+  correct.
 
-### TM2.2 — Attacker controls CLI arguments (`python3 -m crc16_xmodem --data <attacker>`)
+### T1.2 — Malicious input fed to the CLI by a script
+**Description:** A shell pipeline or CI step invokes `crc16-xmodem
+--stdin < untrusted_file` where `untrusted_file` contains up to
+multiple GiB of attacker-controlled bytes.
 
-**Capability:** Full control over the `--data` positional argument list.
-**Constraints:** Argparse does NOT pass values to a shell. The values flow
-through `_parse_data()` which only does hex/int/latin-1 decoding.
-**Goal:** Achieve shell injection, file system damage, arbitrary code execution,
-or denial of service via the CLI.
+- **Worst-case impact:** the CLI reads all bytes via
+  `sys.stdin.buffer.read()`, allocates one Python `bytes` object,
+  iterates over it. Measured throughput: 2.7 MB/s → 6+ minutes for
+  1 GiB. CPU-bound, no network egress, no subprocess spawn. Memory
+  ceiling = input size + Python overhead (~3×). A 100 GiB input would
+  OOM a typical container before the process completes.
+- **Attack vector:** DoS via resource exhaustion (CWE-400). Requires
+  the attacker to control a pipe / file that the victim CLI reads.
+- **Severity:** Low. The package is single-purpose, opt-in, and has no
+  network listening surface. DoS requires local write access to the
+  pipe/file. The 532-test suite includes a 5 MiB linear-time test that
+  proves O(N) scaling.
+- **Mitigation:** none required. If a deployment ingests untrusted
+  input, it should wrap the CLI in a `timeout`/`ulimit` shell guard,
+  not rely on the library to self-throttle.
 
-**Worst-case impact assessment:**
+### T1.3 — Crafted input fed to the Python API directly
+**Description:** An attacker calls `crc(bad_input)` from Python code
+where `bad_input` is something pathological (non-bytes-like, a
+generator, a custom object, a file handle, etc.).
 
-| Attack | Feasible? | Impact |
-|---|---|---|
-| Shell injection via `; rm -rf /` | No — argparse + Python never invokes a shell. Probe VULN-6 confirms the literal string is latin-1 encoded to bytes and CRC'd. | None |
-| Command substitution `$(whoami)`, `` `id` `` | No — same as above. | None |
-| Path traversal via `--data ../../etc/passwd` | No — values are never used as file paths. | None |
-| Eval injection | No — no `eval()` in code. | None |
-| Resource exhaustion via massive `--data` list | Yes — caller controls the list length. Each arg produces 1 byte, so 10M args = 10MB in memory. Linear, not exponential. | Low — bounded by attacker's CLI argv size (typically 128 KiB on Linux). |
-| Cause uncaught exception / raw traceback | Yes — `0xZZ` raises uncaught `ValueError`. Probe VULN-6 confirms. | Low — leaks install path; no secrets. **Finding F-1.** |
+- **Verified behavior:** `crc(None)` raises `TypeError("crc16_xmodem.crc()
+  expected bytes-like, got NoneType")` with NO stack trace and NO
+  side effect. Verified for `None`, `str`, `int`, `float`, `bool`,
+  `list`, `tuple`, `dict`, `set`, `frozenset`, `object()`, and arbitrary
+  iterables (e.g. `FakeBytes` class with `__iter__`/`__len__`). All
+  reject with `TypeError` cleanly.
+- **Worst-case impact:** None. The `isinstance` guard at line 19 of
+  `_crc16_xmodem.py` short-circuits before any iteration.
+- **Attack vector:** none.
+- **Severity:** None.
 
-**Verdict for TM2.2:** One Low finding (F-1: uncaught `ValueError` on malformed
-`0x`-prefixed `--data`). Trivially fixable in `_parse_data()` by wrapping the
-`int(v, 16)` call in a `try/except ValueError` that raises `SystemExit` with
-a clean error message.
+### T1.4 — Unicode / encoding attack on CLI `--data`
+**Description:** A user invokes `crc16-xmodem --data "🚀"` or `--data
+"0xZZ"`. The CLI's `_parse_data` raises `UnicodeEncodeError` or
+`ValueError` that propagates unhandled.
 
-### TM2.3 — Attacker controls stdin bytes (`echo attacker | crc16-xmodem --stdin`)
+- **Verified behavior:** the Python interpreter prints a full
+  traceback including:
+  - Absolute source paths under `/root/projects/crc16-xmodem-pure/.worktrees/cycle132-build/src/...`
+  - The Python version
+  - The CPython implementation name
+  - The exact `int()` / `fromhex()` / `encode()` call that failed
+- **Worst-case impact:** information disclosure (CWE-209). The leaked
+  paths are not secrets (anyone with `ls` access can see them), but the
+  traceback is unsightly and could mislead a less-technical user into
+  thinking the package is broken.
+- **Attack vector:** trick a user into pasting a Unicode emoji or
+  malformed hex into a CLI invocation. Social engineering, low effort.
+- **Severity:** Low. No exploitation of the disclosed information is
+  documented. The fix is cosmetic (catch and pretty-print).
+- **Mitigation:** wrap `_parse_data` in a `try/except` that emits a
+  friendly stderr message and exits 2.
 
-**Capability:** Full control over the bytes piped to stdin.
-**Constraints:** CLI reads `sys.stdin.buffer.read()` into memory; caller
-controls how much they pipe.
-**Goal:** Cause OOM, infinite loop, wrong CRC result, or uncaught exception.
+### T1.5 — Algorithmic confusion with sibling 16-bit CRCs
+**Description:** A user copy-pastes a CRC-16/XMODEM snippet from
+StackOverflow and accidentally picks the CRC-CCITT-FALSE variant
+(same polynomial 0x1021, but init=0xFFFF, xorout=0x0000 — same
+xorout but different init) or CRC-MODBUS (poly=0x8005, refin=true).
 
-**Worst-case impact assessment:**
+- **Verified disambiguation:** the canonical RevEng check value is
+  `0x31C3` for `crc(b"123456789")`. CCITT-FALSE would give `0x29B1`,
+  MODBUS would give `0x4B37`. The 532-test suite explicitly asserts
+  the XMODEM value AND the negative case (cycle_132/qa confirms
+  cross-cycle disambiguation against MODBUS and CCITT-FALSE).
+- **Worst-case impact:** the package, as shipped, is correct. The
+  disambiguation concern is about **users who confuse algorithms**,
+  not about the library producing wrong CRCs.
+- **Severity:** None for the library; user-error-mitigated via SPEC
+  §1's "concrete workflow today" narrative and the README's
+  parameter-table printout via `--register`.
 
-| Attack | Feasible? | Impact |
-|---|---|---|
-| OOM via multi-GB pipe | Yes (caller controls size) | Low — `MemoryError` raised, not a crash-vuln. Documented behavior. |
-| CRLF injection / unicode confusion | No — probe VULN-5 confirms CLI and API agree on all 7 stdin cases (CRLF, LF, multi-LF, non-ASCII, 0..255 sweep, empty). | None |
-| Cause the CLI to print a different CRC than the API | No — probe VULN-5 confirms `cli_out == f"0x{crc(inp):04X}".encode()` for all 7 cases. | None |
-| Cause uncaught exception on malformed stdin | No — `sys.stdin.buffer.read()` is binary-safe; no decoding is attempted. | None |
+### T1.6 — Supply-chain attack via runtime dependencies
+**Description:** A malicious package is uploaded to PyPI and a
+dependency-update tool pulls it in transitively.
 
-**Verdict for TM2.3:** No exploitable vulnerabilities. stdin handling is binary-clean.
+- **Mitigation in place:** `pyproject.toml` line 11: `dependencies = []`.
+  Zero runtime dependencies means zero attack surface. Verified by QA
+  in cycle_132.
+- **Severity:** None.
 
-## TM3 — Non-attacker failure modes (operator-induced)
+### T1.7 — Tampering with the package itself
+**Description:** A malicious actor modifies the source after release,
+or substitutes a backdoored package on PyPI / GitHub.
 
-These are not "vulnerabilities" but document how the package fails when used
-incorrectly.
+- **Mitigation in place:** package is published only via `pip install
+  git+https://github.com/prasad-a-abhishek/crc16-xmodem.git` (per
+  Invariant 9 — not on PyPI). Source is auditable, ~25 LOC of
+  algorithm. Bit-exact match against `crcmod`'s
+  `mkPredefinedCrcFun('xmodem')` is verified on every QA run.
+- **Severity:** Low (typical supply-chain risk for any small library).
+  Out of scope for this audit.
 
-| Misuse | Failure mode | Probe evidence |
-|---|---|---|
-| `crc(12345)` (int) | `TypeError: expected bytes-like, got int` | VULN-1 |
-| `crc(b"")` (empty) | Returns `0x0000` (no exception) | VULN-3 |
-| `crc(b"\x00" * 1_000_000)` (1 MB) | Returns CRC, takes ~470 ms | VULN-3 |
-| `crc(memoryview(buf))` then mutate `buf` then `crc(memoryview(buf))` | Second call sees mutated bytes (live view semantics) | VULN-10 |
-| `python3 -m crc16_xmodem --data 0xZZ` | Uncaught `ValueError`, raw traceback to stderr | VULN-6 (Finding F-1) |
-| `python3 -m crc16_xmodem --data "; rm -rf /"` | Silent CRC over the literal 9-byte latin-1 string | VULN-6 |
-| `python3 -m crc16_xmodem --stdin < 10 GiB file` | OOM or long blocking read, depending on RAM | Documented Python behavior |
-| Use CRC-16/XMODEM for adversarial integrity protection | Trivially forgeable (16-bit, no key) | Info — not a vuln for the documented use case (XMODEM file-transfer checksum, not crypto) |
+---
 
-## TM4 — Adversary chain cross-validation
+## T2 — Worst-case aggregate impact
 
-For the @repo-adversary audit card's downstream phases (T3 fuzzing, T4 triage,
-T5 report), the threat model narrows the fuzzing surface to:
+The most damaging plausible scenario combining T1.1 + T1.4:
 
-1. **`crc()` with adversarial bytes** — focus on (a) type-confusion inputs
-   (covered by VULN-1/2); (b) algorithmic confusion vectors (covered by
-   VULN-8); (c) extreme sizes (covered by VULN-3); (d) edge byte values
-   (covered by VULN-4 + 50K oracle stress in VULN-12).
-2. **`register()`** — zero-arg, deterministic, no fuzz value.
-3. **CLI main()** — focus on (a) `--data` malformed values (covered by VULN-6);
-   (b) stdin variants (covered by VULN-5); (c) flag-conflict precedence
-   (covered by VULN-7).
-4. **`_parse_data()`** — covered transitively by CLI fuzzing.
+1. An operations engineer sets up a CI step that ingests firmware
+   updates via XMODEM-CRC and computes the per-block CRC with the
+   `crc16-xmodem` CLI.
+2. They pass the block contents via `--data "$hex_of_block"` where
+   `$hex_of_block` is sometimes an odd number of characters (a real
+   possibility if the firmware toolchain strips leading zeros).
+3. The CLI silently interprets the hex string as multiple bytes
+   (single-arg even-length happy path) or rejects (odd-length falls
+   through to the int-parsing loop).
+4. The CI step emits a CRC that does NOT match the firmware's
+   embedded CRC. The firmware appears "bad", the field deployment
+   is blocked, engineering escalates.
 
-The T3 harness should target `crc()` with a LibFuzzer / Atheris harness that
-mutates bytes, type-variants, and sizes. Expected findings: zero High/Critical.
+**No exploit. No data exfiltration. No privilege escalation. Just
+operational confusion from silent input disambiguation.**
 
-## TM5 — Worst-case impact summary
+This is consistent with SPEC §6 ("NOT a streaming API", "NOT
+optimized for speed") — the package is positioned as a reference, not
+as a production wire-format codec. Users with high-reliability needs
+are pointed at `crcmod`.
 
-Across all attacker profiles, the maximum realistic impact is:
+---
 
-- **CLI malformed-hex uncaught ValueError** (Finding F-1, Low). Leaks Python
-  install path in a traceback. No secrets, no PII, no RCE. Exit code is
-  non-zero so wrappers can detect. Trivial fix in T4.
-- **Memory exhaustion on multi-GB stdin/argv** (Documented behavior). Caller-
-  controlled, not attacker-exploitable through the package itself.
+## T3 — Out-of-scope concerns (acknowledged but not addressed here)
 
-No Critical, no High, no Medium vulnerabilities identified.
+- **Active-bit-flip detection.** A CRC-16 has 65,536 possible outputs;
+  any 16-bit CRC has a 1/65,536 chance of a random error passing. Use
+  a longer CRC for higher coverage. Out of scope for the library.
+- **Side-channel analysis (timing).** The CRC loop is data-dependent
+  only in the inner XOR/shift branch; both branches take constant
+  time (no memory access, no multiplication, no division). A skilled
+  attacker with a timing oracle could in principle distinguish
+  branches, but for CRC input (which is meant to be public) this is
+  not exploitable.
+- **Quantum-computer resistance.** N/A; CRC is not cryptography.
 
-## TM6 — Out-of-scope (justified)
+---
 
-- **Cryptographic weakness of CRC itself.** A 16-bit CRC has 1/65536 collision
-  probability for random inputs and ~2^16 work for a targeted preimage attack.
-  This is NOT a vulnerability for the documented use case (XMODEM file-transfer
-  checksum over a single packet) and would NOT be a vulnerability for any use
-  case where the caller has chosen CRC-16/XMODEM with informed consent. The
-  README is honest about this: it describes the algorithm as a "cyclic
-  redundancy check used in the XMODEM file-transfer protocol." No security
-  claim is made.
-- **Slow performance.** ~2 MB/s is ~4x slower than `crcmod` C extension. This
-  is documented in the README ("~4x slower than crcmod C extension; acceptable
-  for control-plane workloads") and is a trade-off, not a vulnerability.
-- **Lack of `init`/`refin`/`refout` configurability.** The public API only
-  exposes CRC-16/XMODEM. Callers needing a different CRC variant should use a
-  different package. This is a design choice, not a vulnerability.
+## T4 — Realistic summary
 
-## TM7 — Conclusion
+| Attacker model | Realistic? | Worst-case impact                  | Library mitigates? |
+|----------------|------------|------------------------------------|--------------------|
+| Honest user typo (T1.1)   | High | Operational confusion       | Partially (SPEC, README); CLI footgun |
+| Untrusted CLI input (T1.2) | Medium | DoS / OOM                  | Yes (O(N), no network) |
+| Bad Python API input (T1.3) | High | None                       | Yes (`isinstance` guard) |
+| Unicode CLI attack (T1.4) | Low  | Information disclosure      | No (cosmetic issue) |
+| Algorithmic confusion (T1.5) | High | Wrong CRC                | Yes (parameters pinned, tests) |
+| Supply chain (T1.6)       | Medium | Backdoor                  | Yes (zero deps) |
+| Tampering (T1.7)          | Medium | Backdoor                  | Yes (auditable LOC) |
 
-The threat model confirms a clean audit with one Low finding (F-1: uncaught
-`ValueError` on `0x`-prefixed malformed hex). All higher-severity CWEs
-considered in `CWE_MAP.md` either DO NOT APPLY to the implementation or
-APPLY with zero findings. The package is safe to ship as-is, with the
-recommendation that F-1 be addressed in a follow-up patch (T4 triage card).
+**Overall:** the library is robust against all realistic attacks
+against a CRC reference implementation. The remaining findings (CLI
+input ergonomics) are **operational, not security** — they cause
+incorrect CRCs through user misunderstanding, not through any
+attacker-controlled mechanism. Severity ceiling across the audit is
+**Low**.

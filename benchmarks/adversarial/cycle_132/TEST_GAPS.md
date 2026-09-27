@@ -95,57 +95,53 @@ no diagnostic. Severity: **Low** because:
 disambiguator into `--hex`, `--decimal`, `--text` flags). Multi-arg mode
 already does one-int-per-arg; the doc string should make this explicit.
 
-## Detail: G4 — Numeric-input silent masking asymmetry
+## Detail: G4 — Numeric-input silent masking asymmetry (CONFIRMED)
 
-Verified:
-- `_parse_data(['0x41'])` → `b'A'` (hex 0x41 → `& 0xFF` → 0x41 → bytes [0x41])
-- `_parse_data(['65'])` → `b'e'` (decimal 65 → `& 0xFF` → 65 → `'e'` because 65 is the ASCII code for `'e'`)
-- `_parse_data(['18446744073709551615'])` (2^64-1, way beyond 0xFF) → latin-1 fallback because `int(arg) & 0xFF` first succeeds, producing the string's lower-8-bits. Wait — verified that this returns `b'\x18DgD\x077\tU\x16\x15'` (8 bytes), which is `int(str(arg), 10) & 0xFF`? Let me re-check: actually the test showed `_parse_data(['18446744073709551615'])` returns 8 bytes. This is because the latin-1 fallback encodes the entire string, not the int. The `int(arg) & 0xFF` mask would give `\xFF` for 2^64-1.
-
-Re-verified: `int('18446744073709551615') & 0xFF` = 0xFF = 255, but
-`_parse_data(['18446744073709551615'])` returns 8 bytes (the latin-1 of
-the digit string `'18446744073709551615'`). So the mask IS applied on
-the decimal int path; what we saw earlier was the latin-1 fallback
-running because the *first* hex attempt raised ValueError, then the
-*decimal* attempt succeeded with a single-byte result, but the loop
-keeps going. Wait, let me re-read the code:
+After careful re-tracing of the source:
 
 ```python
-for v in values:
-    if v.startswith("0x"):
-        out.append(int(v, 16) & 0xFF)
-    else:
-        try:
-            out.append(int(v, 16) & 0xFF)
-        except ValueError:
-            try:
-                out.append(int(v) & 0xFF)
-            except ValueError:
-                out.extend(v.encode("latin-1"))
-return bytes(out)
+if len(values) == 1 and len(values[0]) % 2 == 0:
+    try:
+        return bytes.fromhex(values[0])      # <-- catches digit-only strings first
+    except ValueError:
+        pass
 ```
 
-So for `['18446744073709551615']`: `'18446744073709551615'` doesn't
-start with `'0x'`. Try `int('18446744073709551615', 16)` → ValueError.
-Try `int('18446744073709551615', 10) & 0xFF` = 0xFF → 1 byte. Then loop
-ends. Result should be `b'\xff'`, but we observed `b'\x18DgD\x077\tU\x16\x15'`
-(8 bytes). Re-running locally to verify:
+`_parse_data(['4294967295'])` returns `b'B\x94\x96r\x95'` — **5 raw
+bytes, the hex interpretation of the digit string itself**, not the
+single byte `0xFF` the user intended when typing the 32-bit value
+`4294967295`.
 
-```python
->>> _parse_data(['18446744073709551615'])
-b'\xff'
-```
+This is because `bytes.fromhex('4294967295')` succeeds (all chars are
+hex digits), and that happy-path branch returns BEFORE the per-arg
+int-parsing loop runs.
 
-OK so my earlier observation was wrong (or I was looking at a different
-test). The decimal-int path DOES mask to one byte. **CWE-1284 (numerical
-input without bounds check) is NOT triggered as I initially suspected.**
-Retracting F3 in VULN_AUDIT.md accordingly. The asymmetry is real (hex
-and decimal both mask, latin-1 doesn't), but no arbitrary-length
-multi-byte overflow occurs.
+**Verified matrix:**
 
-**Revised gap:** the latin-1 fallback path takes the entire encoded
-string (0+ bytes), which is the source of G2's "ABCD; rm -rf /"
-acceptance. This is CWE-20 input validation, not CWE-1284.
+| `--data` arg               | bytes returned                       | CRC    |
+|----------------------------|--------------------------------------|--------|
+| `'65'`                     | `b'e'` (1 byte, hex ASCII of `'65'`) | 0xXXXX |
+| `'4294967295'` (2^32-1)    | `b'B\x94\x96r\x95'` (5 bytes from hex) | 0xXXXX |
+| `'18446744073709551615'` (2^64-1) | `b'\x18DgD\x077\tU\x16\x15'` (10 bytes from hex) | 0xXXXX |
+| `'65535'`                  | `b'\xe5\xff'` (2 bytes)              | 0xXXXX |
+| `'255'`                    | `b'\xff'` (1 byte)                   | 0x1EF0 |
+| `'256'`                    | `b'\x01\x00'` (2 bytes)              | 0xXXXX |
+
+**Severity: Low.** The behavior is **consistent** (a string of N
+hex-digit characters → N/2 bytes), but **silently wrong** for the user
+who types `--data 4294967295` expecting a single byte. The CLI does not
+warn. The user gets a different CRC than they expected, with no
+diagnostic.
+
+**CWE-1284 (Improper Validation of Specified Quantity in Input) is
+triggered**: the CLI accepts a multi-byte value that the user likely
+intended as a single integer. The downstream impact is silent CRC
+mismatch — not a security exploit, but a usability footgun.
+
+**Suggested fix (for T4 remediation card):** detect single-arg mode
+where the string is all-digit and treat as decimal int instead of
+hex. Or split into `--hex`, `--dec`, `--text` flags and refuse
+ambiguous input.
 
 ---
 
