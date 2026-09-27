@@ -1,0 +1,21 @@
+{
+  "harness": "harness_cross_cycle.py",
+  "target_surface": "S1.a crc(data) \u2014 cross-cycle + crcmod oracle differential",
+  "iters": 100,
+  "det_iters": 100,
+  "seed": 42,
+  "disambiguation_failures": [],
+  "has_crcmod_oracle": true,
+  "crcmod_oracle_crashes": 0,
+  "crcmod_oracle_details_sample": [],
+  "crcmod_oracle_details_total": 0,
+  "reference_impl_crashes": 0,
+  "reference_impl_details_sample": [],
+  "reference_impl_details_total": 0,
+  "determinism_crashes": 0,
+  "determinism_details_sample": [],
+  "determinism_details_total": 0,
+  "elapsed_seconds": 7.15909442002885,
+  "exit_ok": true,
+  "verdict": "CLEAN"
+}
