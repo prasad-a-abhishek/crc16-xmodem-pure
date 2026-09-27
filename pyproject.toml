@@ -5,9 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "crc16_xmodem"
 version = "0.1.0"
-description = "Pure-Python CRC-16/XMODEM reference implementation, zero deps"
+description = "Pure-Python CRC-16/XMODEM reference implementation, zero runtime deps"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+bench = ["crcmod"]
+
+[project.scripts]
+crc16-xmodem = "crc16_xmodem.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
