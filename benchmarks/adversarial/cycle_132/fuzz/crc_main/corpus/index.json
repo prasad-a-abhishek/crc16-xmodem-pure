@@ -1,0 +1,107 @@
+[
+  {
+    "i": 0,
+    "label": "empty",
+    "file": "000_empty.bin",
+    "kind": "bytes",
+    "size": 0
+  },
+  {
+    "i": 1,
+    "label": "one_byte_0x00",
+    "file": "001_one_byte_0x00.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 2,
+    "label": "one_byte_0x01",
+    "file": "002_one_byte_0x01.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 3,
+    "label": "one_byte_0xFF",
+    "file": "003_one_byte_0xFF.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 4,
+    "label": "ascii_123456789",
+    "file": "004_ascii_123456789.bin",
+    "kind": "bytes",
+    "size": 9
+  },
+  {
+    "i": 5,
+    "label": "ascii_hello_world",
+    "file": "005_ascii_hello_world.bin",
+    "kind": "bytes",
+    "size": 11
+  },
+  {
+    "i": 6,
+    "label": "1KiB_zeros",
+    "file": "006_1KiB_zeros.bin",
+    "kind": "bytes",
+    "size": 1024
+  },
+  {
+    "i": 7,
+    "label": "1KiB_ones",
+    "file": "007_1KiB_ones.bin",
+    "kind": "bytes",
+    "size": 1024
+  },
+  {
+    "i": 8,
+    "label": "1KiB_random",
+    "file": "008_1KiB_random.bin",
+    "kind": "bytes",
+    "size": 1024
+  },
+  {
+    "i": 9,
+    "label": "1MiB_zeros",
+    "file": "009_1MiB_zeros.bin",
+    "kind": "bytes",
+    "size": 1048576
+  },
+  {
+    "i": 10,
+    "label": "1MiB_random",
+    "file": "010_1MiB_random.bin",
+    "kind": "bytes",
+    "size": 1048576
+  },
+  {
+    "i": 11,
+    "label": "crlf_data",
+    "file": "011_crlf_data.bin",
+    "kind": "bytes",
+    "size": 200
+  },
+  {
+    "i": 12,
+    "label": "unicode_utf8",
+    "file": "012_unicode_utf8.bin",
+    "kind": "bytes",
+    "size": 25
+  },
+  {
+    "i": 13,
+    "label": "all_byte_values",
+    "file": "013_all_byte_values.bin",
+    "kind": "bytes",
+    "size": 256
+  },
+  {
+    "i": 14,
+    "label": "alternating_0xA5_0x5A",
+    "file": "014_alternating_0xA5_0x5A.bin",
+    "kind": "bytes",
+    "size": 1024
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "i": 0,
+    "label": "zero_data",
+    "file": "000_zero_data.bin",
+    "kind": "bytes",
+    "size": 0
+  },
+  {
+    "i": 1,
+    "label": "one_byte",
+    "file": "001_one_byte.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 2,
+    "label": "0xFF_byte",
+    "file": "002_0xFF_byte.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 3,
+    "label": "0xFFFF_two_bytes",
+    "file": "003_0xFFFF_two_bytes.bin",
+    "kind": "bytes",
+    "size": 2
+  },
+  {
+    "i": 4,
+    "label": "0xFFFFFFFF_four_bytes",
+    "file": "004_0xFFFFFFFF_four_bytes.bin",
+    "kind": "bytes",
+    "size": 4
+  },
+  {
+    "i": 5,
+    "label": "all_byte_values",
+    "file": "005_all_byte_values.bin",
+    "kind": "bytes",
+    "size": 256
+  },
+  {
+    "i": 6,
+    "label": "alternating",
+    "file": "006_alternating.bin",
+    "kind": "bytes",
+    "size": 128
+  },
+  {
+    "i": 7,
+    "label": "1KiB_random",
+    "file": "007_1KiB_random.bin",
+    "kind": "bytes",
+    "size": 1024
+  },
+  {
+    "i": 8,
+    "label": "1MiB_random",
+    "file": "008_1MiB_random.bin",
+    "kind": "bytes",
+    "size": 1024
+  },
+  {
+    "i": 9,
+    "label": "ascii_canonical",
+    "file": "009_ascii_canonical.bin",
+    "kind": "bytes",
+    "size": 9
+  }
+]

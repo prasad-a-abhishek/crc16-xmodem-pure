@@ -1,0 +1,10 @@
+{
+  "iters": 5000,
+  "crashes": 0,
+  "hangs": 0,
+  "oom": 0,
+  "oracle_mismatches": 0,
+  "exit_code": 0,
+  "duration_s": 196.1,
+  "verdict": "CLEAN"
+}

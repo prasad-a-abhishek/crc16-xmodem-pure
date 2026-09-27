@@ -2,14 +2,14 @@
   "harness": "harness_crc_main.py",
   "target_surface": "S1.a crc(data) \u2014 src/crc16_xmodem/_crc16_xmodem.py",
   "mode": "random",
-  "iters": 100,
+  "iters": 50000,
   "seed": 42,
   "canonical_vectors": 9,
   "canonical_failures": [],
   "fuzz_crashes": 0,
   "fuzz_details_sample": [],
   "fuzz_details_total": 0,
-  "elapsed_seconds": 0.4408824590500444,
+  "elapsed_seconds": 257.12787436693907,
   "exit_ok": true,
   "verdict": "CLEAN"
 }

@@ -1,0 +1,76 @@
+{
+  "cycle_id": 132,
+  "phase": "adversary_t3",
+  "card_index": 3,
+  "card_kind": "CORPUS_RUN",
+  "surfaces_run": 6,
+  "iters_total": 117000,
+  "crashes_total": 0,
+  "hangs_total": 0,
+  "oom_total": 0,
+  "oracle_mismatches_total": 0,
+  "wall_clock_seconds": 278.492,
+  "sum_duration_seconds": 1034.22,
+  "surfaces": {
+    "crc_main": {
+      "iters": 50000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 257.128,
+      "verdict": "CLEAN"
+    },
+    "crc_register": {
+      "iters": 50000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 115.54,
+      "verdict": "CLEAN"
+    },
+    "cli_data": {
+      "iters": 5000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 196.1,
+      "verdict": "CLEAN"
+    },
+    "cli_stdin": {
+      "iters": 5000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 278.492,
+      "verdict": "CLEAN"
+    },
+    "type_errors": {
+      "iters": 5000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 0.182,
+      "verdict": "CLEAN"
+    },
+    "cross_cycle": {
+      "iters": 2000,
+      "crashes": 0,
+      "hangs": 0,
+      "oom": 0,
+      "oracle_mismatches": 0,
+      "exit_code": 0,
+      "duration_s": 186.778,
+      "verdict": "CLEAN"
+    }
+  }
+}

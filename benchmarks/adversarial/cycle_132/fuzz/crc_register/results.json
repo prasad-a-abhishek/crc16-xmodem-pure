@@ -1,7 +1,7 @@
 {
   "harness": "harness_crc_register.py",
   "target_surface": "S1.b register() \u2014 src/crc16_xmodem/_crc16_xmodem.py",
-  "iters": 100,
+  "iters": 50000,
   "seed": 42,
   "canonical_failures": [],
   "iter_register_crashes": 0,
@@ -10,7 +10,7 @@
   "bitwidth_masking_crashes": 0,
   "bitwidth_masking_details_sample": [],
   "bitwidth_masking_details_total": 0,
-  "elapsed_seconds": 0.17319737491197884,
+  "elapsed_seconds": 115.54011263605207,
   "exit_ok": true,
   "verdict": "CLEAN"
 }

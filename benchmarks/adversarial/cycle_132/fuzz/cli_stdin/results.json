@@ -1,8 +1,8 @@
 {
   "harness": "harness_cli_stdin.py",
   "target_surface": "S2.d CLI --stdin \u2014 src/crc16_xmodem/__main__.py (line 58, 69-70)",
-  "iters": 100,
-  "large_iters": 3,
+  "iters": 5000,
+  "large_iters": 151,
   "seed": 42,
   "canonical_failures": [],
   "random_payload_crashes": 0,
@@ -11,7 +11,7 @@
   "large_payload_crashes": 0,
   "large_payload_details_sample": [],
   "large_payload_details_total": 0,
-  "elapsed_seconds": 4.21726158587262,
+  "elapsed_seconds": 278.49177270988,
   "exit_ok": true,
   "verdict": "CLEAN"
 }

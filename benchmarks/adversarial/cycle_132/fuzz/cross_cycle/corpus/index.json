@@ -1,0 +1,737 @@
+[
+  {
+    "i": 0,
+    "label": "canonical_123456789",
+    "file": "000_canonical_123456789.bin",
+    "kind": "bytes",
+    "size": 9
+  },
+  {
+    "i": 1,
+    "label": "empty",
+    "file": "001_empty.bin",
+    "kind": "bytes",
+    "size": 0
+  },
+  {
+    "i": 2,
+    "label": "single_byte_0x00",
+    "file": "002_single_byte_0x00.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 3,
+    "label": "single_byte_0x01",
+    "file": "003_single_byte_0x01.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 4,
+    "label": "single_byte_0xFF",
+    "file": "004_single_byte_0xFF.bin",
+    "kind": "bytes",
+    "size": 1
+  },
+  {
+    "i": 5,
+    "label": "random_000_len1528",
+    "file": "005_random_000_len1528.bin",
+    "kind": "bytes",
+    "size": 1528
+  },
+  {
+    "i": 6,
+    "label": "random_001_len1703",
+    "file": "006_random_001_len1703.bin",
+    "kind": "bytes",
+    "size": 1703
+  },
+  {
+    "i": 7,
+    "label": "random_002_len120",
+    "file": "007_random_002_len120.bin",
+    "kind": "bytes",
+    "size": 120
+  },
+  {
+    "i": 8,
+    "label": "random_003_len2624",
+    "file": "008_random_003_len2624.bin",
+    "kind": "bytes",
+    "size": 2624
+  },
+  {
+    "i": 9,
+    "label": "random_004_len135",
+    "file": "009_random_004_len135.bin",
+    "kind": "bytes",
+    "size": 135
+  },
+  {
+    "i": 10,
+    "label": "random_005_len1551",
+    "file": "010_random_005_len1551.bin",
+    "kind": "bytes",
+    "size": 1551
+  },
+  {
+    "i": 11,
+    "label": "random_006_len3356",
+    "file": "011_random_006_len3356.bin",
+    "kind": "bytes",
+    "size": 3356
+  },
+  {
+    "i": 12,
+    "label": "random_007_len2171",
+    "file": "012_random_007_len2171.bin",
+    "kind": "bytes",
+    "size": 2171
+  },
+  {
+    "i": 13,
+    "label": "random_008_len1662",
+    "file": "013_random_008_len1662.bin",
+    "kind": "bytes",
+    "size": 1662
+  },
+  {
+    "i": 14,
+    "label": "random_009_len584",
+    "file": "014_random_009_len584.bin",
+    "kind": "bytes",
+    "size": 584
+  },
+  {
+    "i": 15,
+    "label": "random_010_len3295",
+    "file": "015_random_010_len3295.bin",
+    "kind": "bytes",
+    "size": 3295
+  },
+  {
+    "i": 16,
+    "label": "random_011_len877",
+    "file": "016_random_011_len877.bin",
+    "kind": "bytes",
+    "size": 877
+  },
+  {
+    "i": 17,
+    "label": "random_012_len1794",
+    "file": "017_random_012_len1794.bin",
+    "kind": "bytes",
+    "size": 1794
+  },
+  {
+    "i": 18,
+    "label": "random_013_len1978",
+    "file": "018_random_013_len1978.bin",
+    "kind": "bytes",
+    "size": 1978
+  },
+  {
+    "i": 19,
+    "label": "random_014_len1012",
+    "file": "019_random_014_len1012.bin",
+    "kind": "bytes",
+    "size": 1012
+  },
+  {
+    "i": 20,
+    "label": "random_015_len2303",
+    "file": "020_random_015_len2303.bin",
+    "kind": "bytes",
+    "size": 2303
+  },
+  {
+    "i": 21,
+    "label": "random_016_len2497",
+    "file": "021_random_016_len2497.bin",
+    "kind": "bytes",
+    "size": 2497
+  },
+  {
+    "i": 22,
+    "label": "random_017_len1286",
+    "file": "022_random_017_len1286.bin",
+    "kind": "bytes",
+    "size": 1286
+  },
+  {
+    "i": 23,
+    "label": "random_018_len159",
+    "file": "023_random_018_len159.bin",
+    "kind": "bytes",
+    "size": 159
+  },
+  {
+    "i": 24,
+    "label": "random_019_len2195",
+    "file": "024_random_019_len2195.bin",
+    "kind": "bytes",
+    "size": 2195
+  },
+  {
+    "i": 25,
+    "label": "random_020_len3509",
+    "file": "025_random_020_len3509.bin",
+    "kind": "bytes",
+    "size": 3509
+  },
+  {
+    "i": 26,
+    "label": "random_021_len3816",
+    "file": "026_random_021_len3816.bin",
+    "kind": "bytes",
+    "size": 3816
+  },
+  {
+    "i": 27,
+    "label": "random_022_len2865",
+    "file": "027_random_022_len2865.bin",
+    "kind": "bytes",
+    "size": 2865
+  },
+  {
+    "i": 28,
+    "label": "random_023_len3141",
+    "file": "028_random_023_len3141.bin",
+    "kind": "bytes",
+    "size": 3141
+  },
+  {
+    "i": 29,
+    "label": "random_024_len988",
+    "file": "029_random_024_len988.bin",
+    "kind": "bytes",
+    "size": 988
+  },
+  {
+    "i": 30,
+    "label": "random_025_len4080",
+    "file": "030_random_025_len4080.bin",
+    "kind": "bytes",
+    "size": 4080
+  },
+  {
+    "i": 31,
+    "label": "random_026_len639",
+    "file": "031_random_026_len639.bin",
+    "kind": "bytes",
+    "size": 639
+  },
+  {
+    "i": 32,
+    "label": "random_027_len597",
+    "file": "032_random_027_len597.bin",
+    "kind": "bytes",
+    "size": 597
+  },
+  {
+    "i": 33,
+    "label": "random_028_len2088",
+    "file": "033_random_028_len2088.bin",
+    "kind": "bytes",
+    "size": 2088
+  },
+  {
+    "i": 34,
+    "label": "random_029_len3864",
+    "file": "034_random_029_len3864.bin",
+    "kind": "bytes",
+    "size": 3864
+  },
+  {
+    "i": 35,
+    "label": "random_030_len863",
+    "file": "035_random_030_len863.bin",
+    "kind": "bytes",
+    "size": 863
+  },
+  {
+    "i": 36,
+    "label": "random_031_len310",
+    "file": "036_random_031_len310.bin",
+    "kind": "bytes",
+    "size": 310
+  },
+  {
+    "i": 37,
+    "label": "random_032_len2581",
+    "file": "037_random_032_len2581.bin",
+    "kind": "bytes",
+    "size": 2581
+  },
+  {
+    "i": 38,
+    "label": "random_033_len1755",
+    "file": "038_random_033_len1755.bin",
+    "kind": "bytes",
+    "size": 1755
+  },
+  {
+    "i": 39,
+    "label": "random_034_len3399",
+    "file": "039_random_034_len3399.bin",
+    "kind": "bytes",
+    "size": 3399
+  },
+  {
+    "i": 40,
+    "label": "random_035_len2316",
+    "file": "040_random_035_len2316.bin",
+    "kind": "bytes",
+    "size": 2316
+  },
+  {
+    "i": 41,
+    "label": "random_036_len2412",
+    "file": "041_random_036_len2412.bin",
+    "kind": "bytes",
+    "size": 2412
+  },
+  {
+    "i": 42,
+    "label": "random_037_len2220",
+    "file": "042_random_037_len2220.bin",
+    "kind": "bytes",
+    "size": 2220
+  },
+  {
+    "i": 43,
+    "label": "random_038_len1582",
+    "file": "043_random_038_len1582.bin",
+    "kind": "bytes",
+    "size": 1582
+  },
+  {
+    "i": 44,
+    "label": "random_039_len280",
+    "file": "044_random_039_len280.bin",
+    "kind": "bytes",
+    "size": 280
+  },
+  {
+    "i": 45,
+    "label": "random_040_len2255",
+    "file": "045_random_040_len2255.bin",
+    "kind": "bytes",
+    "size": 2255
+  },
+  {
+    "i": 46,
+    "label": "random_041_len2417",
+    "file": "046_random_041_len2417.bin",
+    "kind": "bytes",
+    "size": 2417
+  },
+  {
+    "i": 47,
+    "label": "random_042_len2046",
+    "file": "047_random_042_len2046.bin",
+    "kind": "bytes",
+    "size": 2046
+  },
+  {
+    "i": 48,
+    "label": "random_043_len1017",
+    "file": "048_random_043_len1017.bin",
+    "kind": "bytes",
+    "size": 1017
+  },
+  {
+    "i": 49,
+    "label": "random_044_len3718",
+    "file": "049_random_044_len3718.bin",
+    "kind": "bytes",
+    "size": 3718
+  },
+  {
+    "i": 50,
+    "label": "random_045_len2701",
+    "file": "050_random_045_len2701.bin",
+    "kind": "bytes",
+    "size": 2701
+  },
+  {
+    "i": 51,
+    "label": "random_046_len3997",
+    "file": "051_random_046_len3997.bin",
+    "kind": "bytes",
+    "size": 3997
+  },
+  {
+    "i": 52,
+    "label": "random_047_len1195",
+    "file": "052_random_047_len1195.bin",
+    "kind": "bytes",
+    "size": 1195
+  },
+  {
+    "i": 53,
+    "label": "random_048_len2819",
+    "file": "053_random_048_len2819.bin",
+    "kind": "bytes",
+    "size": 2819
+  },
+  {
+    "i": 54,
+    "label": "random_049_len3269",
+    "file": "054_random_049_len3269.bin",
+    "kind": "bytes",
+    "size": 3269
+  },
+  {
+    "i": 55,
+    "label": "random_050_len1371",
+    "file": "055_random_050_len1371.bin",
+    "kind": "bytes",
+    "size": 1371
+  },
+  {
+    "i": 56,
+    "label": "random_051_len1067",
+    "file": "056_random_051_len1067.bin",
+    "kind": "bytes",
+    "size": 1067
+  },
+  {
+    "i": 57,
+    "label": "random_052_len1228",
+    "file": "057_random_052_len1228.bin",
+    "kind": "bytes",
+    "size": 1228
+  },
+  {
+    "i": 58,
+    "label": "random_053_len1611",
+    "file": "058_random_053_len1611.bin",
+    "kind": "bytes",
+    "size": 1611
+  },
+  {
+    "i": 59,
+    "label": "random_054_len40",
+    "file": "059_random_054_len40.bin",
+    "kind": "bytes",
+    "size": 40
+  },
+  {
+    "i": 60,
+    "label": "random_055_len1037",
+    "file": "060_random_055_len1037.bin",
+    "kind": "bytes",
+    "size": 1037
+  },
+  {
+    "i": 61,
+    "label": "random_056_len2312",
+    "file": "061_random_056_len2312.bin",
+    "kind": "bytes",
+    "size": 2312
+  },
+  {
+    "i": 62,
+    "label": "random_057_len1625",
+    "file": "062_random_057_len1625.bin",
+    "kind": "bytes",
+    "size": 1625
+  },
+  {
+    "i": 63,
+    "label": "random_058_len1241",
+    "file": "063_random_058_len1241.bin",
+    "kind": "bytes",
+    "size": 1241
+  },
+  {
+    "i": 64,
+    "label": "random_059_len3782",
+    "file": "064_random_059_len3782.bin",
+    "kind": "bytes",
+    "size": 3782
+  },
+  {
+    "i": 65,
+    "label": "random_060_len1644",
+    "file": "065_random_060_len1644.bin",
+    "kind": "bytes",
+    "size": 1644
+  },
+  {
+    "i": 66,
+    "label": "random_061_len2102",
+    "file": "066_random_061_len2102.bin",
+    "kind": "bytes",
+    "size": 2102
+  },
+  {
+    "i": 67,
+    "label": "random_062_len2944",
+    "file": "067_random_062_len2944.bin",
+    "kind": "bytes",
+    "size": 2944
+  },
+  {
+    "i": 68,
+    "label": "random_063_len3652",
+    "file": "068_random_063_len3652.bin",
+    "kind": "bytes",
+    "size": 3652
+  },
+  {
+    "i": 69,
+    "label": "random_064_len62",
+    "file": "069_random_064_len62.bin",
+    "kind": "bytes",
+    "size": 62
+  },
+  {
+    "i": 70,
+    "label": "random_065_len3496",
+    "file": "070_random_065_len3496.bin",
+    "kind": "bytes",
+    "size": 3496
+  },
+  {
+    "i": 71,
+    "label": "random_066_len2445",
+    "file": "071_random_066_len2445.bin",
+    "kind": "bytes",
+    "size": 2445
+  },
+  {
+    "i": 72,
+    "label": "random_067_len147",
+    "file": "072_random_067_len147.bin",
+    "kind": "bytes",
+    "size": 147
+  },
+  {
+    "i": 73,
+    "label": "random_068_len2278",
+    "file": "073_random_068_len2278.bin",
+    "kind": "bytes",
+    "size": 2278
+  },
+  {
+    "i": 74,
+    "label": "random_069_len682",
+    "file": "074_random_069_len682.bin",
+    "kind": "bytes",
+    "size": 682
+  },
+  {
+    "i": 75,
+    "label": "random_070_len3400",
+    "file": "075_random_070_len3400.bin",
+    "kind": "bytes",
+    "size": 3400
+  },
+  {
+    "i": 76,
+    "label": "random_071_len2735",
+    "file": "076_random_071_len2735.bin",
+    "kind": "bytes",
+    "size": 2735
+  },
+  {
+    "i": 77,
+    "label": "random_072_len2148",
+    "file": "077_random_072_len2148.bin",
+    "kind": "bytes",
+    "size": 2148
+  },
+  {
+    "i": 78,
+    "label": "random_073_len938",
+    "file": "078_random_073_len938.bin",
+    "kind": "bytes",
+    "size": 938
+  },
+  {
+    "i": 79,
+    "label": "random_074_len153",
+    "file": "079_random_074_len153.bin",
+    "kind": "bytes",
+    "size": 153
+  },
+  {
+    "i": 80,
+    "label": "random_075_len2944",
+    "file": "080_random_075_len2944.bin",
+    "kind": "bytes",
+    "size": 2944
+  },
+  {
+    "i": 81,
+    "label": "random_076_len2668",
+    "file": "081_random_076_len2668.bin",
+    "kind": "bytes",
+    "size": 2668
+  },
+  {
+    "i": 82,
+    "label": "random_077_len1925",
+    "file": "082_random_077_len1925.bin",
+    "kind": "bytes",
+    "size": 1925
+  },
+  {
+    "i": 83,
+    "label": "random_078_len1181",
+    "file": "083_random_078_len1181.bin",
+    "kind": "bytes",
+    "size": 1181
+  },
+  {
+    "i": 84,
+    "label": "random_079_len263",
+    "file": "084_random_079_len263.bin",
+    "kind": "bytes",
+    "size": 263
+  },
+  {
+    "i": 85,
+    "label": "random_080_len1980",
+    "file": "085_random_080_len1980.bin",
+    "kind": "bytes",
+    "size": 1980
+  },
+  {
+    "i": 86,
+    "label": "random_081_len134",
+    "file": "086_random_081_len134.bin",
+    "kind": "bytes",
+    "size": 134
+  },
+  {
+    "i": 87,
+    "label": "random_082_len3193",
+    "file": "087_random_082_len3193.bin",
+    "kind": "bytes",
+    "size": 3193
+  },
+  {
+    "i": 88,
+    "label": "random_083_len535",
+    "file": "088_random_083_len535.bin",
+    "kind": "bytes",
+    "size": 535
+  },
+  {
+    "i": 89,
+    "label": "random_084_len3041",
+    "file": "089_random_084_len3041.bin",
+    "kind": "bytes",
+    "size": 3041
+  },
+  {
+    "i": 90,
+    "label": "random_085_len3002",
+    "file": "090_random_085_len3002.bin",
+    "kind": "bytes",
+    "size": 3002
+  },
+  {
+    "i": 91,
+    "label": "random_086_len3327",
+    "file": "091_random_086_len3327.bin",
+    "kind": "bytes",
+    "size": 3327
+  },
+  {
+    "i": 92,
+    "label": "random_087_len235",
+    "file": "092_random_087_len235.bin",
+    "kind": "bytes",
+    "size": 235
+  },
+  {
+    "i": 93,
+    "label": "random_088_len2037",
+    "file": "093_random_088_len2037.bin",
+    "kind": "bytes",
+    "size": 2037
+  },
+  {
+    "i": 94,
+    "label": "random_089_len2797",
+    "file": "094_random_089_len2797.bin",
+    "kind": "bytes",
+    "size": 2797
+  },
+  {
+    "i": 95,
+    "label": "random_090_len3151",
+    "file": "095_random_090_len3151.bin",
+    "kind": "bytes",
+    "size": 3151
+  },
+  {
+    "i": 96,
+    "label": "random_091_len3707",
+    "file": "096_random_091_len3707.bin",
+    "kind": "bytes",
+    "size": 3707
+  },
+  {
+    "i": 97,
+    "label": "random_092_len2865",
+    "file": "097_random_092_len2865.bin",
+    "kind": "bytes",
+    "size": 2865
+  },
+  {
+    "i": 98,
+    "label": "random_093_len1148",
+    "file": "098_random_093_len1148.bin",
+    "kind": "bytes",
+    "size": 1148
+  },
+  {
+    "i": 99,
+    "label": "random_094_len1554",
+    "file": "099_random_094_len1554.bin",
+    "kind": "bytes",
+    "size": 1554
+  },
+  {
+    "i": 100,
+    "label": "random_095_len320",
+    "file": "100_random_095_len320.bin",
+    "kind": "bytes",
+    "size": 320
+  },
+  {
+    "i": 101,
+    "label": "random_096_len3677",
+    "file": "101_random_096_len3677.bin",
+    "kind": "bytes",
+    "size": 3677
+  },
+  {
+    "i": 102,
+    "label": "random_097_len2487",
+    "file": "102_random_097_len2487.bin",
+    "kind": "bytes",
+    "size": 2487
+  },
+  {
+    "i": 103,
+    "label": "random_098_len3144",
+    "file": "103_random_098_len3144.bin",
+    "kind": "bytes",
+    "size": 3144
+  },
+  {
+    "i": 104,
+    "label": "random_099_len3614",
+    "file": "104_random_099_len3614.bin",
+    "kind": "bytes",
+    "size": 3614
+  }
+]

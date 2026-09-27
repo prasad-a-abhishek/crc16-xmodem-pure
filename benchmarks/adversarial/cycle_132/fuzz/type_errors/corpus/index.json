@@ -1,0 +1,79 @@
+[
+  {
+    "i": 0,
+    "label": "None",
+    "file": "000_None.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 1,
+    "label": "zero_int",
+    "file": "001_zero_int.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 2,
+    "label": "empty_string",
+    "file": "002_empty_string.txt",
+    "kind": "str",
+    "size": 0
+  },
+  {
+    "i": 3,
+    "label": "empty_list",
+    "file": "003_empty_list.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 4,
+    "label": "empty_dict",
+    "file": "004_empty_dict.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 5,
+    "label": "nonempty_string",
+    "file": "005_nonempty_string.txt",
+    "kind": "str",
+    "size": 3
+  },
+  {
+    "i": 6,
+    "label": "nonempty_int",
+    "file": "006_nonempty_int.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 7,
+    "label": "nonempty_list",
+    "file": "007_nonempty_list.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 8,
+    "label": "nonempty_dict",
+    "file": "008_nonempty_dict.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 9,
+    "label": "true_bool",
+    "file": "009_true_bool.json",
+    "kind": "descriptor",
+    "size": 0
+  },
+  {
+    "i": 10,
+    "label": "false_bool",
+    "file": "010_false_bool.json",
+    "kind": "descriptor",
+    "size": 0
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "crc_main": {
+    "inputs": 15,
+    "types": [
+      "bytes"
+    ]
+  },
+  "crc_register": {
+    "inputs": 10,
+    "types": [
+      "bytes"
+    ]
+  },
+  "cli_data": {
+    "inputs": 12,
+    "types": [
+      "str"
+    ]
+  },
+  "cli_stdin": {
+    "inputs": 11,
+    "types": [
+      "bytes"
+    ]
+  },
+  "type_errors": {
+    "inputs": 11,
+    "types": [
+      "descriptor",
+      "str"
+    ]
+  },
+  "cross_cycle": {
+    "inputs": 105,
+    "types": [
+      "bytes"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "i": 0,
+    "label": "canonical_123456789_hex",
+    "file": "000_canonical_123456789_hex.txt",
+    "kind": "str",
+    "size": 18
+  },
+  {
+    "i": 1,
+    "label": "empty_input",
+    "file": "001_empty_input.txt",
+    "kind": "str",
+    "size": 0
+  },
+  {
+    "i": 2,
+    "label": "malformed_hex_odd",
+    "file": "002_malformed_hex_odd.txt",
+    "kind": "str",
+    "size": 7
+  },
+  {
+    "i": 3,
+    "label": "malformed_hex_letter",
+    "file": "003_malformed_hex_letter.txt",
+    "kind": "str",
+    "size": 2
+  },
+  {
+    "i": 4,
+    "label": "hex_with_crlf",
+    "file": "004_hex_with_crlf.txt",
+    "kind": "str",
+    "size": 20
+  },
+  {
+    "i": 5,
+    "label": "hex_unicode_emoji",
+    "file": "005_hex_unicode_emoji.txt",
+    "kind": "str",
+    "size": 1
+  },
+  {
+    "i": 6,
+    "label": "hex_unicode_chinese",
+    "file": "006_hex_unicode_chinese.txt",
+    "kind": "str",
+    "size": 2
+  },
+  {
+    "i": 7,
+    "label": "hex_unicode_greek",
+    "file": "007_hex_unicode_greek.txt",
+    "kind": "str",
+    "size": 3
+  },
+  {
+    "i": 8,
+    "label": "hex_negative_signed",
+    "file": "008_hex_negative_signed.txt",
+    "kind": "str",
+    "size": 2
+  },
+  {
+    "i": 9,
+    "label": "hex_out_of_byte_range",
+    "file": "009_hex_out_of_byte_range.txt",
+    "kind": "str",
+    "size": 5
+  },
+  {
+    "i": 10,
+    "label": "hex_decimal_mixed",
+    "file": "010_hex_decimal_mixed.txt",
+    "kind": "str",
+    "size": 8
+  },
+  {
+    "i": 11,
+    "label": "hex_zero",
+    "file": "011_hex_zero.txt",
+    "kind": "str",
+    "size": 2
+  }
+]
