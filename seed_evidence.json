@@ -1,0 +1,16 @@
+{
+  "algorithm": "CRC-16/XMODEM",
+  "spec_authority": "XMODEM protocol (Ward Christensen, 1977) -- CRC-16/XMODEM as the standard frame checksum for XMODEM-CRC file-transfer protocol",
+  "reveng_entry": "width=16 poly=0x1021 init=0x0000 refin=false refout=false xorout=0x0000 check=0x31C3",
+  "reveng_url": "https://reveng.sourceforge.io/crc-catalogue/all.htm",
+  "vectors": [
+    {"input_hex": "", "output": "0x0000", "comment": "empty input -- no bytes consumed, register stays at init=0x0000; xorout=0x0000 so result is 0x0000"},
+    {"input_hex": "00", "output": "0x0000", "comment": "single 0x00 byte from init=0x0000 with xorout=0x0000 also collapses to 0x0000"},
+    {"input_hex": "01", "output": "0x1021"},
+    {"input_hex": "ff", "output": "0x1EF0"},
+    {"input_hex": "00 01 02 03 04 05 06 07 08 09", "output": "0x2378"},
+    {"input_hex": "31 32 33 34 35 36 37 38 39", "output": "0x31C3", "comment": "RevEng check value -- ASCII '123456789'"}
+  ],
+  "build_target_test_count": 100,
+  "ac_count": 12
+}
