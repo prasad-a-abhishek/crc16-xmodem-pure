@@ -1,0 +1,30 @@
+Expected behaviour after fix: the CLI's `--stdin` path either (a) reads
+stdin chunk-by-chunk with progress reporting to stderr, or (b) enforces a
+configurable `--max-bytes N` limit that rejects oversized input with a
+friendly error.
+
+Option (a) is preferred for production use. Suggested sketch:
+    # in main(), when --stdin is set:
+    crc_reg = 0
+    bytes_read = 0
+    chunk_size = 64 * 1024
+    while True:
+        chunk = sys.stdin.buffer.read1(chunk_size)
+        if not chunk:
+            break
+        crc_reg = update(crc_reg, chunk)
+        bytes_read += len(chunk)
+        if args.verbose and bytes_read % (1024 * 1024) == 0:
+            print(f"\r{bytes_read:,} bytes processed", end="", file=sys.stderr)
+    print(f"0x{crc_reg ^ XOROUT:04X}")
+
+Option (b) is simpler but does not improve UX:
+    if args.max_bytes is not None and bytes_read > args.max_bytes:
+        print(f"error: stdin exceeds --max-bytes {args.max_bytes}",
+              file=sys.stderr)
+        return 2
+
+Both options require either a streaming `update(crc_reg, chunk)` API exposed
+in `_crc16_xmodem.py` (which is currently a one-shot `crc(data)` only) or a
+new module-level function. This is a non-trivial refactor; recommended only
+if the CLI is positioned for production use.

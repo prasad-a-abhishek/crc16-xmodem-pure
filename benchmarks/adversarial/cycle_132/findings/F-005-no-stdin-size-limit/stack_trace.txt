@@ -1,0 +1,13 @@
+No stack trace — this is an operational UX gap, not a runtime failure.
+
+No crash, hang, OOM, oracle mismatch, or unexpected return code was triggered
+during T3 corpus execution (cli_stdin 5 000 iters + 151 large iters up to
+1 MiB, all CLEAN). The 10 MiB repro confirmed exit 0 with correct CRC;
+throughput is linear at ~2.7 MB/s as measured by the VULN_AUDIT card.
+
+The missing `--max-bytes` and progress-reporting are tooling UX
+improvements; the algorithm itself is bit-exact against the RevEng
+CRC-16/XMODEM reference and is verifiable through the `crc()` Python API.
+
+This finding is recorded for future cycle reference (e.g., cycle_133+ if the
+CLI is promoted from "debug tool" to "production wire-format codec").

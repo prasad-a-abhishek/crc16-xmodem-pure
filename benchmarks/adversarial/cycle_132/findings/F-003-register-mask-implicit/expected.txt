@@ -1,0 +1,26 @@
+Expected behaviour after fix: a test in `tests/test_crc16_xmodem.py`
+explicitly asserts the bitwidth invariant for arbitrary random inputs.
+
+Suggested implementation (one property-based test):
+    from hypothesis import given, settings
+    import hypothesis.strategies as st
+
+    @given(st.binary(min_size=0, max_size=4096))
+    @settings(max_examples=10_000, deadline=None)
+    def test_crc_output_in_bitwidth(data):
+        result = crc(data)
+        assert 0 <= result < 0x10000, (
+            f"CRC out of 16-bit range for {len(data)}B input: 0x{result:04X}"
+        )
+
+Alternatively, a non-Hypothesis version using stdlib random:
+    def test_crc_output_in_bitwidth_explicit():
+        rng = random.Random(1337)
+        for _ in range(10_000):
+            n = rng.randint(0, 4096)
+            data = bytes(rng.getrandbits(8) for _ in range(n))
+            r = crc(data)
+            assert 0 <= r < 0x10000
+
+This locks the bitwidth invariant in CI as a unit test rather than relying on
+incidental agreement with the crcmod oracle.

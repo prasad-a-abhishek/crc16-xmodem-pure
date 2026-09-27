@@ -1,0 +1,13 @@
+Current behaviour (cycle_132, commit 93c7596):
+`python3 -m crc16_xmodem --register` emits the 7 RevEng parameter fields in
+`key=value` form on stdout, one per line. There is no `--json` flag (argparse
+rejects it with exit code 2).
+
+The output is correct but unstructured: `python3 -m crc16_xmodem --register |
+jq` fails with a parse error because the first line `width=16` is not valid
+JSON. Users who want JSON output must write a small awk/grep pipeline to
+parse the key=value format, or call `register()` from Python directly.
+
+No test in `tests/test_crc16_xmodem.py` asserts the output format of
+`--register` or the absence of a `--json` flag. The CRC computation itself
+(AC1-AC12) is fully covered by the 532-test suite.

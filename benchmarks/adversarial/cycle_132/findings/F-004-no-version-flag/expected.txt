@@ -1,0 +1,17 @@
+Expected behaviour after fix: a `--version` / `-V` CLI flag prints the
+package version (sourced from `crc16_xmodem.__version__`) and exits 0 without
+running the CRC computation.
+
+Example expected output:
+    $ python3 -m crc16_xmodem --version
+    crc16-xmodem 0.1.0
+    $ echo $?
+    0
+
+Suggested implementation (2 lines):
+    from . import __version__
+    p.add_argument("--version", "-V", action="version",
+                   version=f"crc16-xmodem {__version__}")
+
+Argparse handles the action automatically — no further changes needed in
+main(). The flag exits 0 before any other argument is processed.

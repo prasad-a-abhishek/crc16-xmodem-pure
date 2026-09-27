@@ -1,0 +1,30 @@
+Expected behaviour after fix: a `--json` / `-j` CLI flag emits the
+`--register` parameter table as a JSON object (parseable by `jq`,
+`json.loads`, etc.). The default `--register` output should remain
+`key=value` for backward compatibility.
+
+Example expected output with `--json`:
+    $ python3 -m crc16_xmodem --register --json
+    {
+      "width": 16,
+      "poly": 4129,
+      "init": 0,
+      "refin": false,
+      "refout": false,
+      "xorout": 0,
+      "check": 12739
+    }
+
+Suggested implementation (~5 lines):
+    import json as _json
+    ...
+    p.add_argument("--json", "-j", action="store_true",
+                   help="emit --register output as JSON")
+    ...
+    if args.register:
+        reg = register()
+        if getattr(args, "json", False):
+            print(_json.dumps(reg, indent=2))
+        else:
+            for k, v in reg.items():
+                print(f"{k}={v}")

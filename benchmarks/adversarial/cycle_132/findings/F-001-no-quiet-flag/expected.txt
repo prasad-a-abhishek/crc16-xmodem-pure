@@ -1,0 +1,15 @@
+Expected behaviour after fix: a `--quiet` / `-q` CLI flag suppresses the
+"0x{NRC:04X}" prefix and newline on stdout, allowing shell pipelines that only
+care about the exit status to consume the tool without text-filtering. The flag
+should be additive (no behavioural change without `--quiet`), and should NOT
+affect `--self-test` or `--register` output (those are explicit diagnostic
+flags whose entire purpose is to print).
+
+Suggested implementation (5 lines):
+    p.add_argument("--quiet", "-q", action="store_true",
+                   help="print CRC only, no 0x prefix / newline (machine output)")
+    ...
+    if args.quiet:
+        print(f"{crc(data):04X}")
+    else:
+        print(f"0x{crc(data):04X}")

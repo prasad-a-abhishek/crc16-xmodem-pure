@@ -1,0 +1,10 @@
+No stack trace — this is a test-coverage observation, not a runtime failure.
+
+No crash, hang, OOM, oracle mismatch, or unexpected return code was triggered
+during T3 corpus execution (50 000 iters crc_register, 2 000 iters
+cross_cycle, all CLEAN with bit-exact RevEng oracle agreement). The implicit
+bitwidth enforcement is correct in the current implementation; the gap is
+the absence of an explicit range-assertion test pinning it as an invariant.
+
+This finding is recorded for future cycle reference (e.g., cycle_133+ if the
+test suite is hardened with property-based testing).

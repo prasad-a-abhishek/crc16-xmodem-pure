@@ -1,0 +1,9 @@
+No stack trace — this is a CLI ergonomics gap, not a runtime failure.
+
+No crash, hang, OOM, oracle mismatch, or unexpected return code was triggered
+during T3 corpus execution (5 000 iters cli_data surface, all CLEAN). The
+missing flag is a documentation gap; the algorithm itself is bit-exact and
+verifiable via the `crc()` Python API regardless of the CLI surface.
+
+This finding is recorded for future cycle reference (e.g., cycle_133+ if a
+`--quiet` ergonomic improvement is requested by the user base).

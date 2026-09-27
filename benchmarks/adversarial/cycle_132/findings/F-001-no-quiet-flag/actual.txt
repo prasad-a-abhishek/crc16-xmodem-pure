@@ -1,0 +1,12 @@
+Current behaviour (cycle_132, commit 93c7596): `python3 -m crc16_xmodem --data
+31 32 33 34 35 36 37 38 39` always emits `0x31C3` followed by a newline on
+stdout. There is no `--quiet` flag — `argparse` rejects it with the standard
+"unrecognized arguments" error and exit code 2.
+
+The behaviour is correct (the CRC is always printed) but inflexible: shell
+pipelines that want exit-code-only must wrap the call in `cut -d'x' -f2` or
+similar text filtering. The current implementation does not require this to
+function — the algorithm itself is bit-exact.
+
+No test in `tests/test_crc16_xmodem.py` asserts the absence of a `--quiet` flag
+or documents the intent; this is purely a documentation/ergonomics gap.

@@ -1,0 +1,12 @@
+Current behaviour (cycle_132, commit 93c7596): the bitwidth invariant is
+ENFORCED by `& _MASK = & 0xFFFF` at every shift in `crc()`. Direct repro on
+10 000 random inputs of length 0-4096 bytes (seed=42): out-of-range count = 0.
+
+However, NO test in `tests/test_crc16_xmodem.py` explicitly asserts
+`0 <= crc(data) < 0x10000`. The 532-test suite verifies bit-exact agreement
+with `crcmod.mkPredefinedCrcFun('xmodem')` (AC11) which masks its output to
+the same 16 bits, so conformance is established indirectly. The `register()`
+metadata (width=16, xorout=0, etc.) is pinned by 7 dedicated tests.
+
+The implementation is correct; this is a test-coverage defense-in-depth gap,
+not a runtime issue.

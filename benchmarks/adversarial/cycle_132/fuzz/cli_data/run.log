@@ -1,0 +1,15 @@
+{
+  "harness": "harness_cli_data.py",
+  "target_surface": "S2.c CLI --data \u2014 src/crc16_xmodem/__main__.py::_parse_data",
+  "iters": 5000,
+  "seed": 42,
+  "canonical_failures": [],
+  "must_fail_violations": [],
+  "random_hex_crashes": 0,
+  "random_hex_details_total": 0,
+  "crlf_whitespace_crashes": 0,
+  "crlf_whitespace_details_total": 0,
+  "elapsed_seconds": 196.0995239210315,
+  "exit_ok": true,
+  "verdict": "CLEAN"
+}

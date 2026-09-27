@@ -1,0 +1,12 @@
+Current behaviour (cycle_132, commit 93c7596): `python3 -m crc16_xmodem
+--version` and `python3 -m crc16_xmodem -V` are both rejected by argparse
+with exit code 2 and the standard "unrecognized arguments" error. The CLI
+has no version flag.
+
+The version IS available via the Python API:
+`python3 -c "import crc16_xmodem; print(crc16_xmodem.__version__)"` correctly
+prints `0.1.0` with exit code 0.
+
+No test in `tests/test_crc16_xmodem.py` asserts the absence of a `--version`
+flag. The CRC computation itself (AC1-AC12) is fully covered by the 532-test
+suite.

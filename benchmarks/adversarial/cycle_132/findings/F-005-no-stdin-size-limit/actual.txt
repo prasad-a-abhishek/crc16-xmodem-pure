@@ -1,0 +1,14 @@
+Current behaviour (cycle_132, commit 93c7596):
+`src/crc16_xmodem/__main__.py:65` calls `data = sys.stdin.buffer.read()` with
+no size argument and no progress reporting. Direct repro on 10 MiB random
+payload: completes in ~3.88 s with exit code 0 and a CRC of `0x0185`. No
+progress is emitted during the read; the user sees a blank terminal until
+the CRC line appears.
+
+T3 corpus execution (cli_stdin surface, 5 000 random + 151 large iters up to
+1 MiB) verified: 0 crashes, 0 hangs, 0 OOM, all CLEAN. The CRC computation
+is O(n) and bounded by Python's stdin buffer.
+
+No test in `tests/test_crc16_xmodem.py` asserts the absence of stdin size
+limit or progress reporting. The CRC computation itself (AC1-AC12) is fully
+covered by the 532-test suite.

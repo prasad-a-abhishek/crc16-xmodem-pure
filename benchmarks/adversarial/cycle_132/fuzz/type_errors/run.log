@@ -1,0 +1,19 @@
+{
+  "harness": "harness_type_errors.py",
+  "target_surface": "S1.a crc(data) type contract \u2014 _crc16_xmodem.py (lines 7-31)",
+  "iters": 5000,
+  "seed": 42,
+  "bad_data_cases": 28,
+  "accept_data_cases": 6,
+  "bad_data_crashes": 0,
+  "bad_data_details_total": 0,
+  "message_quality_crashes": 0,
+  "message_quality_details_total": 0,
+  "accept_data_crashes": 0,
+  "accept_data_details_total": 0,
+  "subclass_crashes": 0,
+  "subclass_details_total": 0,
+  "elapsed_seconds": 0.182155666872859,
+  "exit_ok": true,
+  "verdict": "CLEAN"
+}
